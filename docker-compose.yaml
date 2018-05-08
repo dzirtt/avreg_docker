@@ -14,9 +14,9 @@ services:
             ipv4_address: 192.168.11.1
   
   avreg:
-    image: idxxx
+    image: 1ed195f91a45
     networks: 
-        avreg_bridge
+        - avreg_bridge
     depends_on:
         - db
 
