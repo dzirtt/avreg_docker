@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: udsdozEyKNBR
+      MYSQL_DATABASE: avreg6_db
+      MYSQL_USER: avreg
+      MYSQL_PASSWORD: udsdozEyKNBR
+    networks: 
+        avreg_bridge:
+            ipv4_address: 192.168.11.1
+  
+  avreg:
+    image: idxxx
+    networks: 
+        avreg_bridge
+    depends_on:
+        - db
+
+networks:
+  avreg_bridge:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 192.168.11.0/24
+        
