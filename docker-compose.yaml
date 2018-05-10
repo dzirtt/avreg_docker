@@ -4,21 +4,29 @@ services:
   db:
     image: mysql
     restart: always
+    entrypoint: ['/entrypoint.sh', '--default-authentication-plugin=mysql_native_password']
     environment:
       MYSQL_ROOT_PASSWORD: udsdozEyKNBR
       MYSQL_DATABASE: avreg6_db
       MYSQL_USER: avreg
       MYSQL_PASSWORD: udsdozEyKNBR
     networks: 
-        avreg_bridge:
-            ipv4_address: 192.168.11.1
+        - avreg_bridge
+
   
   avreg:
-    image: 1ed195f91a45
+    image: dzirtt:avreg
     networks: 
         - avreg_bridge
+    ports:
+        - "80:80"
     depends_on:
         - db
+    environment:
+        MYSQL_USER: avreg
+        MYSQL_PASSWORD: udsdozEyKNBR
+    links:
+      - "db:database"
 
 networks:
   avreg_bridge:
@@ -28,4 +36,4 @@ networks:
       config:
       -
         subnet: 192.168.11.0/24
-        
+
