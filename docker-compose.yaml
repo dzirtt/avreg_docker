@@ -26,6 +26,7 @@ services:
         MYSQL_DATABASE: avreg6_db
         MYSQL_USER: avreg
         MYSQL_PASSWORD: udsdozEyKNBR
+        MYSQL_HOST: database
     links:
       - "db:database"
 

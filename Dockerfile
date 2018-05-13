@@ -29,12 +29,13 @@ RUN service avreg stop; service mysql stop; update-rc.d mysql disable
 RUN rm /var/run/avreg/supervisor.sock
 
 #create db secret files
-RUN echo 'db-user = '${db_user}'' > "/etc/avreg/avregd.secret"
-RUN echo 'db-passwd = '${db_password}'' >> "/etc/avreg/avregd.secret"
-RUN cp /etc/avreg/avregd.secret /etc/avreg/avreg-mon.secret; cp /etc/avreg/avregd.secret /etc/avreg/avreg-site.secret
-RUN cp /etc/avreg/avregd.secret /etc/avreg/avreg-unlink.secret
+# RUN echo 'db-user = '${db_user}'' > "/etc/avreg/avregd.secret"
+# RUN echo 'db-passwd = '${db_password}'' >> "/etc/avreg/avregd.secret"
+# RUN cp /etc/avreg/avregd.secret /etc/avreg/avreg-mon.secret; cp /etc/avreg/avregd.secret /etc/avreg/avreg-site.secret
+# RUN cp /etc/avreg/avregd.secret /etc/avreg/avreg-unlink.secret
 
-RUN sed -i "s/; db-host = ''/db-host = 'database'/" /etc/avreg/avreg.conf
+# RUN sed -i "s/; db-host = ''/db-host = 'database'/" /etc/avreg/avreg.conf
+
 RUN echo -e ':rawmsg, contains, "avreg"  /var/log/avreg.log\n& stop' > /etc/rsyslog.d/avreg.conf; touch /var/log/avreg.log
 
 #apache setup
