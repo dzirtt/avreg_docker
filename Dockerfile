@@ -35,27 +35,24 @@ RUN cp /etc/avreg/avregd.secret /etc/avreg/avreg-mon.secret; cp /etc/avreg/avreg
 RUN cp /etc/avreg/avregd.secret /etc/avreg/avreg-unlink.secret
 
 RUN sed -i "s/; db-host = ''/db-host = 'database'/" /etc/avreg/avreg.conf
+RUN echo -e ':rawmsg, contains, "avreg"  /var/log/avreg.log\n& stop' > /etc/rsyslog.d/avreg.conf; touch /var/log/avreg.log
 
-RUN echo -e ':rawmsg, contains, "avreg"  /var/log/avreg.log\n& stop' > /etc/rsyslog.d/avreg.conf
-    
+#apache setup
+RUN echo "ServerName avreg.local" > /etc/apache2/conf-available/fqdn.conf; a2enconf fqdn
+RUN a2enmod rewrite; sed -i '/DocumentRoot/aRewriteEngine  on\nRewriteRule    ^/$  /avreg [R]' '/etc/apache2/sites-available/000-default.conf'
+
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #create db avreg6_db
 
-#copy predefined config files
-#ADD core.conf ${DELUGE_HOME}/tmp
-# Expose ports
 EXPOSE 80
-EXPOSE 443
-
-#VOLUME ${DELUGE_CONFIG_DIR}
-#VOLUME ${DELUGE_DATA_DIR}
+EXPOSE 874
 
 ## store video, create volume to here
-#VOLUEM /var/spool/avreg
+#VOLUME /var/spool/avreg
 
-#ADD entrypoint.sh /home/deluge
-#RUN chmod +x /home/deluge/entrypoint.sh
+ADD entrypoint.sh /
+RUN chmod +x /entrypoint.sh
 
-#ENTRYPOINT ["/bin/bash"]
-CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
+#CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"

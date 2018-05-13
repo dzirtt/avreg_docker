@@ -23,6 +23,7 @@ services:
     depends_on:
         - db
     environment:
+        MYSQL_DATABASE: avreg6_db
         MYSQL_USER: avreg
         MYSQL_PASSWORD: udsdozEyKNBR
     links:
@@ -35,5 +36,5 @@ networks:
       driver: default
       config:
       -
-        subnet: 192.168.11.0/24
+        subnet: 192.168.11.0/29
 
